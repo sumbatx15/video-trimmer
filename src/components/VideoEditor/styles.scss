@@ -5,9 +5,13 @@ $trimmerBorderWidth: 2px;
   display: flex;
   flex-flow: column;
   gap: 20px;
+  padding: 20px;
   margin: 0 auto;
   max-width: 860px;
   color: white;
+  background-color: #2c2c30;
+  border-radius: 10px;
+  border: 1px solid #505056;
 
   h1 > span {
     color: $trimmerColor;
@@ -111,6 +115,15 @@ $trimmerBorderWidth: 2px;
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
     }
+    &[data-dragging="true"]::before {
+      content: attr(data-time);
+      position: absolute;
+      top: 0;
+      left: 50%;
+      z-index: 2;
+      transform: translate(-50%, -200%);
+    }
+
     &::after {
       content: "";
       position: absolute;

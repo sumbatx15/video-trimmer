@@ -6,6 +6,7 @@ import { generateVideoThumbnail } from "../../utils/video";
 
 export const VideoEditor: FC = () => {
   const [src, setSrc] = useState("");
+
   const frames = useQuery({
     queryKey: ["frames", src],
     queryFn: async () => generateVideoThumbnail(src),

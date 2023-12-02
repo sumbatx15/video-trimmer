@@ -21,9 +21,8 @@ export const Trimmer = ({
   const isClick = useRef(true);
   const trimmerRef = useRef<HTMLDivElement>(null);
 
-  const trimmerWidth = trimmer.end - trimmer.start;
-
   const handleTrimmerDrag: DraggableEventHandler = (_, data) => {
+    const trimmerWidth = trimmer.end - trimmer.start;
     const width = containerRef.current?.clientWidth || 1;
     const deltaX = (data.deltaX / width) * 100;
     const start = limit(trimmer.start + deltaX, 0, 100 - trimmerWidth);
@@ -43,7 +42,12 @@ export const Trimmer = ({
   }, []);
 
   return (
-    <DraggableCore onDrag={handleTrimmerDrag}>
+    <DraggableCore
+      onStart={(e) => {
+        if (e.target !== trimmerRef.current) return false;
+      }}
+      onDrag={handleTrimmerDrag}
+    >
       <div
         ref={trimmerRef}
         className="trimmer"

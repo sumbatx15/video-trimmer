@@ -1,10 +1,10 @@
 import { FC, useRef } from "react";
 import { ITrimmer } from "../../hooks/useVideoEditor/useVideoEditor";
+import { limit } from "../../utils/video";
 import { Deadzone } from "./Deadzone";
 import { Frames } from "./Frames";
-import { LeftResizeHandle } from "./Handles/LeftResizeHandle";
 import { PlayHead } from "./Handles/PlayHead";
-import { RightResizeHandle } from "./Handles/RightResizeHandle";
+import { ResizeHandle } from "./Handles/ResizeHandle";
 import { Trimmer } from "./Trimmer";
 import "./styles.scss";
 
@@ -50,17 +50,36 @@ export const Timeline: FC<
           duration={duration}
           onChange={onChange}
         >
-          <LeftResizeHandle
+          <ResizeHandle
+            position="left"
+            time={(trimmer.start * duration) / 100}
+            value={trimmer.start}
             containerRef={containerRef}
-            trimmer={trimmer}
-            duration={duration}
-            onChange={onChange}
+            onChange={(start) => {
+              onChange({
+                time: (start * duration) / 100,
+                trimmer: {
+                  start: limit(start, 0, trimmer.end),
+                  end: trimmer.end,
+                },
+              });
+            }}
           />
-          <RightResizeHandle
+
+          <ResizeHandle
+            position="right"
+            time={(trimmer.end * duration) / 100}
+            value={trimmer.end}
             containerRef={containerRef}
-            trimmer={trimmer}
-            duration={duration}
-            onChange={onChange}
+            onChange={(end) => {
+              onChange({
+                time: (end * duration) / 100,
+                trimmer: {
+                  start: trimmer.start,
+                  end: limit(end, trimmer.start, 100),
+                },
+              });
+            }}
           />
         </Trimmer>
         <Deadzone
